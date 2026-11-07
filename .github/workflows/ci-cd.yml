@@ -53,8 +53,9 @@ jobs:
         run: |
           python -c "import main; print('Application FastAPI chargée avec succès !')"
 
+      # ==========================================
       # ÉTAPES DOCKER (CI/CD Containerization)
-
+      # ==========================================
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
