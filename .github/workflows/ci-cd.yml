@@ -1,32 +1,45 @@
+# nom du workflow
 name: Healthcare AI CI/CD Pipeline
 
+# EVENTS : Les déclencheurs du pipeline
 on:
   push:
     branches: [ main ]
 
+# JOBS : L'ensemble des tâches à exécuter
 jobs:
   build-and-test:
+
+    # RUNNERS : L'environnement d'exécution
     runs-on: ubuntu-latest
 
+    # STEPS : La séquence ordonnée des étapes
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
+      # Étape 1 : Récupération du code source
+      - name: Checkout repository
+        # ACTIONS : Utilisation d'une action
+        uses: actions/checkout@v3
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+      # Étape 2 : Configuration de l'environnement Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11' # Fixe la version exacte de Python
 
-    - name: Install DVC and pull model
-      run: |
-        pip install dvc
-        dvc pull model.pkl --allow-missing || echo "Modèle absent, utilisation du mode dégradé"
+      # Étape 3 : Installation des dépendances du projet
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-    - name: Verify FastAPI application import
-      run: |
-        python -c "import main; print('Application FastAPI chargée avec succès !')"
+      # Étape 4 : Gestion du modèle lourd avec DVC
+      - name: Install DVC and pull model
+        run: |
+          pip install dvc
+          dvc pull model.pkl --allow-missing || echo "Modèle absent, utilisation du mode dégradé"
+
+      # Étape 5 : Test d'intégration de l'application
+      - name: Verify FastAPI application import
+        run: |
+          python -c "import main; print('Application FastAPI chargée avec succès !')"
