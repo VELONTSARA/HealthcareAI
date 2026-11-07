@@ -17,7 +17,13 @@ if os.path.exists("model.pkl"):
 else:
     model = None
 
-
+@app.get("/")
+def read_root():
+    return {
+        "status": "online",
+        "message": "Bienvenue sur l'API Healthcare AI",
+        "docs": "/docs"
+    }
 @app.post("/predict")
 def predict_patient(
         age: int,
