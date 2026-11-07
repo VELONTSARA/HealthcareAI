@@ -1,17 +1,13 @@
 name: Healthcare AI CI/CD Pipeline
 
-# EVENTS : Déclencheurs du pipeline
 on:
   push:
     branches: [ main ]
 
-# JOBS : Ensemble des tâches à exécuter
 jobs:
   build-and-test:
-    # RUNNERS : Machine virtuelle hôte pour l'exécution
     runs-on: ubuntu-latest
 
-    # STEPS : Séquence des actions à réaliser
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
@@ -29,7 +25,7 @@ jobs:
     - name: Install DVC and pull model
       run: |
         pip install dvc
-        dvc pull model.pkl --allow-missing || echo "DVC remote non configuré, passage en mode sécurisé"
+        dvc pull model.pkl --allow-missing || echo "Modèle absent, utilisation du mode dégradé"
 
     - name: Verify FastAPI application import
       run: |
