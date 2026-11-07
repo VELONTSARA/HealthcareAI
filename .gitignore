@@ -2,4 +2,5 @@ model.pkl
 healthcare_dataset.csv
 mlruns/
 .dvc/
-*.dvc
+!*.dvc
+!.dvc
