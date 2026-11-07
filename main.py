@@ -1,16 +1,21 @@
+import os
+
 from fastapi import FastAPI
 import pandas as pd
 import joblib
 
-# Initialisation de l'application FastAPI
+# Initialisation de FastAPI
 app = FastAPI(
     title="Healthcare AI API",
     description="API de prédiction pour le modèle Random Forest",
     version="1.0"
 )
 
-# Chargement de votre modèle .pkl au démarrage
-model = joblib.load('model.pkl')
+# Chargement de modèle
+if os.path.exists("model.pkl"):
+    model = joblib.load("model.pkl")
+else:
+    model = None
 
 
 @app.post("/predict")
@@ -24,7 +29,7 @@ def predict_patient(
         billing_amount: float,
         insurance_provider: str
 ):
-    # Structuration des données entrantes sous forme de DataFrame
+    # Structuration des données entrantes comme DataFrame
     input_data = pd.DataFrame({
         'Age': [age],
         'Gender': [gender],
@@ -36,11 +41,11 @@ def predict_patient(
         'Insurance Provider': [insurance_provider]
     })
 
-    # Prédiction avec le modèle
+    # Prédiction avec modèle
     prediction = model.predict(input_data)
     probabilities = model.predict_proba(input_data)
 
-    # Retour du résultat au format JSON
+    # Retour du résultat en JSON
     return {
         "resultat_predit": prediction[0],
         "probabilites": probabilities[0].round(2).tolist()
