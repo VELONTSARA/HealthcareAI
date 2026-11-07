@@ -67,4 +67,5 @@ jobs:
         run: |
           docker run -d -p 8000:8000 --name test-container healthcare-ai-app:latest
           sleep 5
-          curl --fail http://localhost:8000/ || exit 1
+          
+          curl --fail http://localhost:8000/docs || exit 1
