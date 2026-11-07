@@ -12,10 +12,13 @@ app = FastAPI(
 )
 
 # Chargement de modèle
-if os.path.exists("model.pkl"):
-    model = joblib.load("model.pkl")
+MODEL_PATH = "model.pkl"
+if os.path.exists(MODEL_PATH):
+    model = joblib.load(MODEL_PATH)
+    print("Modèle chargé avec succès.")
 else:
     model = None
+    print("Attention : model.pkl introuvable.")
 
 
 @app.post("/predict")
