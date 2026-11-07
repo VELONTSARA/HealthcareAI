@@ -1,25 +1,20 @@
 name: Healthcare AI CI/CD Pipeline
 
-# 1. EVENTS
-  #Déclencheurs du pipeline
+# 1. EVENTS : Déclencheurs du pipeline
 on:
   push:
     branches: [ main ]
 
-# 2. JOBS
-  #Ensemble des tâches à exécuter
+# 2. JOBS : Ensemble des tâches à exécuter
 jobs:
   build-and-test:
-    # 3. RUNNERS
-      #Machine virtuelle hôte pour l'exécution
+    # 3. RUNNERS : Machine virtuelle hôte pour l'exécution
     runs-on: ubuntu-latest
 
-    # 5. STEPS
-      #Séquence des actions à réaliser
+    # 5. STEPS : Séquence des actions à réaliser
     steps:
     - name: Checkout repository
-      # 4. ACTIONS
-        #Action officielle GitHub pour cloner le dépôt
+      # 4. ACTIONS : Action officielle GitHub pour cloner le dépôt
       uses: actions/checkout@v3
 
     - name: Set up Python
@@ -31,6 +26,11 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+
+    - name: Install DVC and pull model
+      run: |
+        pip install dvc
+        dvc pull model.pkl --allow-missing || echo "DVC remote non configuré, le fichier local manquant n'est pas bloquant pour l'instant"
 
     - name: Verify FastAPI application import
       run: |
